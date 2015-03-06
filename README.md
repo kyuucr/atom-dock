@@ -24,6 +24,10 @@ cd atom-dock
 make install
 ```
 
+#### Recommended extension
+We also recommend installing [Panel OSD by jenslody](https://extensions.gnome.org/extension/708/panel-osd/)
+to move notifications since the bottom area is used for the dock.
+
 ### License
 
 This project is licensed with GPL version 3 and later. See LICENSE for more details.
