@@ -13,23 +13,6 @@ const AppFavorites = imports.ui.appFavorites;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
-// Get Gnome version for AppIconMenu compability
-let ShellVersion = imports.misc.config.PACKAGE_VERSION.split(".").map(function (x) { return +x; });
-const MAJOR_VERSION = ShellVersion[0];
-const MINOR_VERSION = ShellVersion[1];
-
-const WindowMenuItem = new Lang.Class({
-    Name: 'WindowMenuItem',
-    Extends: PopupMenu.PopupBaseMenuItem,
-
-    _init: function (text, params) {
-        this.parent(params);
-
-        this.label = new St.Label({text: text});
-
-        this.actor.add(this.label);
-    }
-});
 
 /* This class is a extension of the upstream AppIcon class (ui.appDisplay.js).
  * Changes are done to modify activate, popup menu and running app behavior.

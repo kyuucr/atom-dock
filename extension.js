@@ -40,18 +40,6 @@ let atomDock;
 let intellihide;
 let settings;
 
-const WindowMenuItem = new Lang.Class({
-    Name: 'WindowMenuItem',
-    Extends: PopupMenu.PopupBaseMenuItem,
-
-    _init: function (text, params) {
-        this.parent(params);
-
-        this.label = new St.Label({text: text});
-
-        this.actor.add(this.label);
-    }
-});
 
 function injectToFunction(parent, name, func) {
     let origin = parent[name];
