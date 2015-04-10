@@ -139,3 +139,79 @@ const GlobalSignalHandler = new Lang.Class({
     }
 
 });
+
+// Function injection
+const FunctionInjector = new Lang.Class({
+    Name: 'AtomDock.FunctionInjector',
+
+    _init: function(){
+        this._injections = {};
+    },
+
+    push: function(/*unlimited 3-long array arguments*/){
+        this._inject('generic', arguments);
+    },
+
+    destroy: function() {
+        for (let label in this._injections) {
+            this.deinjectWithLabel(label);
+        }
+    },
+
+    pushWithLabel: function(label /* plus unlimited 3-long array arguments*/) {
+        // skip first element of thearguments array;
+        let elements = [];
+        for (let i = 1 ; i < arguments.length; i++) {
+            elements.push(arguments[i]);
+        }
+
+        this._inject(label, elements);
+    },
+
+    _inject: function(label, elements) {
+
+        if (this._injections[label] === undefined) {
+            this._injections[label] = [];
+        }
+
+        for (let i = 0; i < elements.length; i++) {
+
+            let parent = elements[i][0];
+            let name = elements[i][1];
+            let func = elements[i][2];
+
+            let origin = parent[name];
+            parent[name] = function() {
+                let ret;
+                ret = origin.apply(this, arguments);
+                if (ret === undefined) {
+                    ret = func.apply(this, arguments);
+                }
+
+                return ret;
+            };
+
+            this._injections[label].push( [ parent, name, origin ] );
+        }
+    },
+
+    deinjectWithLabel: function(label) {
+
+        if (this._injections[label]) {
+            for (let i = 0; i < this._injections[label].length; i++) {
+                let parent = this._injections[label][i][0];
+                let name = this._injections[label][i][1];
+                let originalFunc = this._injections[label][i][2];
+
+                if (originalFunc === undefined) {
+                    delete parent[name];
+                } else {
+                    parent[name] = originalFunc;
+                }
+            }
+
+            delete this._injections[label];
+        }
+    }
+
+});
